@@ -76,10 +76,16 @@ func (a *APIItem) Create(data map[string]any) *CreateItem {
 		collection: a.collection,
 		config:     a.config,
 		data: ActionBody{
-			Body:        data,
-			DisableFaas: true,
+			Body:         data,
+			DisableFaas:  true,
+			BlockBuilder: false,
 		},
 	}
+}
+
+func (a *CreateItem) BlockBuilder(isBlock bool) *CreateItem {
+	a.data.BlockBuilder = isBlock
+	return a
 }
 
 func (c *CreateItem) DisableFaas(isDisable bool) *CreateItem {
@@ -93,7 +99,7 @@ func (c *CreateItem) Exec() (Datas, Response, error) {
 			Status: "done",
 		}
 		createdObject Datas
-		url           = fmt.Sprintf("%s/v2/items/%s?from-ofs=%t", c.config.BaseURL, c.collection, c.data.DisableFaas)
+		url           = fmt.Sprintf("%s/v2/items/%s?from-ofs=%t&block_builder=%t", c.config.BaseURL, c.collection, c.data.DisableFaas, c.data.BlockBuilder)
 	)
 
 	var appId = c.config.AppId
@@ -125,8 +131,17 @@ func (a *APIItem) Update(data map[string]any) *UpdateItem {
 	return &UpdateItem{
 		collection: a.collection,
 		config:     a.config,
-		data:       ActionBody{Body: data, DisableFaas: true},
+		data: ActionBody{
+			Body:         data,
+			DisableFaas:  true,
+			BlockBuilder: false,
+		},
 	}
+}
+
+func (a *UpdateItem) BlockBuilder(isBlock bool) *UpdateItem {
+	a.data.BlockBuilder = isBlock
+	return a
 }
 
 func (a *UpdateItem) DisableFaas(isDisable bool) *UpdateItem {
@@ -140,7 +155,7 @@ func (u *UpdateItem) ExecSingle() (ClientApiUpdateResponse, Response, error) {
 			Status: "done",
 		}
 		updateObject ClientApiUpdateResponse
-		url          = fmt.Sprintf("%s/v2/items/%s?from-ofs=%t", u.config.BaseURL, u.collection, u.data.DisableFaas)
+		url          = fmt.Sprintf("%s/v2/items/%s?from-ofs=%t&block_builder=%t", u.config.BaseURL, u.collection, u.data.DisableFaas, u.data.BlockBuilder)
 	)
 
 	var appId = u.config.AppId

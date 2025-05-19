@@ -113,8 +113,9 @@ type (
 )
 
 type ActionBody struct {
-	Body        map[string]any `json:"data"`
-	DisableFaas bool           `json:"disable_faas"`
+	Body         map[string]any `json:"data"`
+	DisableFaas  bool           `json:"disable_faas"`
+	BlockBuilder bool           `json:"block_builder"`
 }
 
 type AuthRequest struct {
